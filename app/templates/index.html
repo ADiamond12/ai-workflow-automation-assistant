@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">Local-First Demo</p>
+  <h1>{{ app_name }}</h1>
+  <p class="lede">
+    Intake triage service with deterministic routing, optional OpenAI enrichment, and a pending
+    review queue for human follow-up.
+  </p>
+  <div class="card-grid">
+    <article class="card">
+      <h2>API Surface</h2>
+      <p>
+        Submit requests, inspect a single decision, list pending queue items, and verify service
+        health through the current FastAPI routes.
+      </p>
+    </article>
+    <article class="card">
+      <h2>Provider Boundary</h2>
+      <p>
+        Mock mode is the safest default. The OpenAI path is optional, validated, and designed to
+        fail explicitly unless mock fallback is intentionally enabled.
+      </p>
+    </article>
+    <article class="card">
+      <h2>Current Limits</h2>
+      <p>
+        This build is still a single-tenant local demo. Review actions are now demoable, but
+        auth and a fuller deployment posture are still future work.
+      </p>
+    </article>
+  </div>
+  <div class="cta-row">
+    <a class="button" href="/queue">Open Review Queue</a>
+  </div>
+</section>
+{% endblock %}

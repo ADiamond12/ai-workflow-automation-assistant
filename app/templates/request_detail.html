@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="stack">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Request Detail</p>
+      <h1>{{ detail.submission.company }}</h1>
+      <p class="lede">
+        Review one workflow decision, capture reviewer notes, and approve or edit the current
+        routing recommendation.
+      </p>
+    </div>
+    <div class="button-row">
+      <a class="button button-secondary" href="/queue">Back To Queue</a>
+      <a class="button button-secondary" href="/">Home</a>
+    </div>
+  </div>
+
+  {% if updated %}
+  <section class="notice">
+    Review update saved.
+  </section>
+  {% endif %}
+
+  <div class="detail-grid">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Submission</h2>
+        <span class="pill">{{ detail.submission.channel }}</span>
+      </div>
+      <dl class="detail-list">
+        <dt>Sender</dt>
+        <dd>{{ detail.submission.sender_name }} · {{ detail.submission.sender_email }}</dd>
+        <dt>Company</dt>
+        <dd>{{ detail.submission.company }}</dd>
+        <dt>Customer Tier</dt>
+        <dd>{{ detail.submission.customer_tier }}</dd>
+        <dt>Urgency Hint</dt>
+        <dd>{{ detail.submission.urgency_hint or "None" }}</dd>
+        <dt>Message</dt>
+        <dd>{{ detail.submission.message_text }}</dd>
+      </dl>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Decision</h2>
+        <span class="pill pill-{{ detail.review_status }}">{{ detail.review_status }}</span>
+      </div>
+      <dl class="detail-list">
+        <dt>Category</dt>
+        <dd>{{ detail.decision.category }}</dd>
+        <dt>Priority</dt>
+        <dd>{{ detail.decision.priority }}</dd>
+        <dt>Recommended Team</dt>
+        <dd>{{ detail.decision.recommended_team }}</dd>
+        <dt>Recommended Action</dt>
+        <dd>{{ detail.decision.recommended_action }}</dd>
+        <dt>Confidence</dt>
+        <dd>{{ "%.2f"|format(detail.decision.confidence) }}</dd>
+        <dt>Summary</dt>
+        <dd>{{ detail.decision.summary }}</dd>
+        <dt>Explanation</dt>
+        <dd>{{ detail.decision.explanation }}</dd>
+      </dl>
+    </section>
+  </div>
+
+  <div class="detail-grid">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Review Action</h2>
+        <span class="pill">Queue position: {{ detail.queue_position or "cleared" }}</span>
+      </div>
+      <form class="review-form" method="post" action="/requests/{{ detail.request_id }}/review">
+        <label>
+          Review Status
+          <select name="review_status" required>
+            {% for option in review_status_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>
+          Reviewer Name
+          <input type="text" name="reviewer_name" placeholder="Ops reviewer" />
+        </label>
+
+        <label>
+          Reviewer Notes
+          <textarea
+            name="reviewer_notes"
+            rows="5"
+            placeholder="Why this was approved or edited"
+          ></textarea>
+        </label>
+
+        <div class="form-grid">
+          <label>
+            Override Category
+            <select name="category">
+              <option value="">Keep current</option>
+              {% for option in category_options %}
+              <option value="{{ option }}">{{ option }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            Override Priority
+            <select name="priority">
+              <option value="">Keep current</option>
+              {% for option in priority_options %}
+              <option value="{{ option }}">{{ option }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            Override Team
+            <select name="recommended_team">
+              <option value="">Keep current</option>
+              {% for option in team_options %}
+              <option value="{{ option }}">{{ option }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            Override Action
+            <select name="recommended_action">
+              <option value="">Keep current</option>
+              {% for option in action_options %}
+              <option value="{{ option }}">{{ option }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+
+        <button class="button" type="submit">Save Review Decision</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Review History</h2>
+        <span class="pill">{{ detail.reviews|length }} entries</span>
+      </div>
+      {% if detail.reviews %}
+      <div class="history-list">
+        {% for review in detail.reviews %}
+        <article class="history-item">
+          <div class="history-meta">
+            <span class="pill pill-{{ review.review_status }}">{{ review.review_status }}</span>
+            <span class="history-author">{{ review.reviewer_name or "Unspecified reviewer" }}</span>
+          </div>
+          {% if review.reviewer_notes %}
+          <p class="history-notes">{{ review.reviewer_notes }}</p>
+          {% endif %}
+          {% if review.edited_fields %}
+          <ul class="history-fields">
+            {% for key, value in review.edited_fields.items() %}
+            <li><strong>{{ key }}</strong>: {{ value }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty-state">No review history yet.</p>
+      {% endif %}
+    </section>
+  </div>
+</section>
+{% endblock %}
