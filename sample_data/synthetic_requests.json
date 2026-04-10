@@ -1,0 +1,32 @@
+[
+  {
+    "message_text": "Our finance team was charged twice for invoice NW-2048 after upgrading to the enterprise annual plan. Please review the duplicate charge today because procurement is holding the PO until we respond.",
+    "sender_name": "Alex Morgan",
+    "sender_email": "alex@northwindlabs.example",
+    "company": "Northwind Labs",
+    "channel": "email",
+    "customer_tier": "enterprise",
+    "received_at": "2026-03-26T10:00:00Z",
+    "urgency_hint": "urgent follow-up requested"
+  },
+  {
+    "message_text": "Two premium users cannot log in after last night's MFA reset. One account is locked after repeated attempts and the team needs workspace access before a customer call this afternoon.",
+    "sender_name": "Jordan Lee",
+    "sender_email": "jordan@shorelineops.example",
+    "company": "Shoreline Ops",
+    "channel": "chat",
+    "customer_tier": "premium",
+    "received_at": "2026-03-26T12:15:00Z",
+    "urgency_hint": "customer call later today"
+  },
+  {
+    "message_text": "We need a security review, updated pricing, and a redline-ready NDA for your analytics add-on before our vendor shortlist closes next week.",
+    "sender_name": "Priya Shah",
+    "sender_email": "priya@harborprocurement.example",
+    "company": "Harbor Procurement",
+    "channel": "web_form",
+    "customer_tier": "standard",
+    "received_at": "2026-03-27T08:45:00Z",
+    "urgency_hint": "needed for vendor shortlist"
+  }
+]

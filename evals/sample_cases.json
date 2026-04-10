@@ -1,0 +1,59 @@
+[
+  {
+    "case_id": "billing-double-charge-enterprise",
+    "submission": {
+      "message_text": "Our enterprise invoice was charged twice after renewal and we need someone to review the duplicate payment immediately.",
+      "sender_name": "Alex Morgan",
+      "sender_email": "alex@northwindlabs.example",
+      "company": "Northwind Labs",
+      "channel": "email",
+      "customer_tier": "enterprise",
+      "received_at": "2026-03-26T10:00:00Z",
+      "urgency_hint": "urgent finance follow-up"
+    },
+    "expected": {
+      "category": "billing_issue",
+      "priority": "urgent",
+      "recommended_team": "billing",
+      "recommended_action": "escalate"
+    }
+  },
+  {
+    "case_id": "account-access-premium-reset",
+    "submission": {
+      "message_text": "A premium workspace user is locked out after an MFA reset and cannot access the account before a customer meeting this afternoon.",
+      "sender_name": "Jordan Lee",
+      "sender_email": "jordan@shorelineops.example",
+      "company": "Shoreline Ops",
+      "channel": "chat",
+      "customer_tier": "premium",
+      "received_at": "2026-03-26T12:15:00Z",
+      "urgency_hint": "meeting later today"
+    },
+    "expected": {
+      "category": "account_access",
+      "priority": "high",
+      "recommended_team": "support",
+      "recommended_action": "route_to_team"
+    }
+  },
+  {
+    "case_id": "vendor-security-review",
+    "submission": {
+      "message_text": "Please send pricing, security review materials, and an NDA for your analytics add-on so procurement can keep the vendor review moving.",
+      "sender_name": "Priya Shah",
+      "sender_email": "priya@harborprocurement.example",
+      "company": "Harbor Procurement",
+      "channel": "web_form",
+      "customer_tier": "standard",
+      "received_at": "2026-03-27T08:45:00Z",
+      "urgency_hint": "vendor shortlist this week"
+    },
+    "expected": {
+      "category": "vendor_request",
+      "priority": "medium",
+      "recommended_team": "operations",
+      "recommended_action": "route_to_team"
+    }
+  }
+]
