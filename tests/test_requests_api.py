@@ -178,7 +178,7 @@ class UnavailableProvider(AIProvider):
         raise ProviderUnavailableError("OpenAI provider failed without fallback: unavailable")
 
 
-def test_provider_unavailable_maps_to_502(client: TestClient) -> None:
+def test_provider_unavailable_maps_to_503(client: TestClient) -> None:
     def override_workflow_service():
         with Session(get_engine()) as session:
             yield WorkflowService(session=session, provider=UnavailableProvider())

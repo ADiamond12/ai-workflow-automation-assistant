@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     app_name: str = "AI Workflow Automation Assistant"
     app_version: str = "0.1.0"
     environment: str = "local"
-    debug: bool = True
+    debug: bool = False
     log_level: str = "INFO"
     api_v1_prefix: str = "/api/v1"
     database_url: str = "sqlite:///./.local/workflow_assistant.db"

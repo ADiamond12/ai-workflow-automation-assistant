@@ -2,8 +2,10 @@ services:
   app:
     build: .
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    env_file:
-      - .env
+    environment:
+      AWA_DATABASE_URL: sqlite:///./.local/workflow_assistant.db
+      AWA_PROVIDER_MODE: mock
+      AWA_DEBUG: "true"
     ports:
       - "8000:8000"
     volumes:

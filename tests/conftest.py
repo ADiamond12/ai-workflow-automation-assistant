@@ -1,9 +1,17 @@
+import os
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
-from app.core.database import Base, get_engine
-from app.main import app
-from app.repositories import models  # noqa: F401
+TEST_DB_PATH = Path(".pytest_cache/test_workflow_assistant.db").resolve()
+TEST_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+os.environ["AWA_DATABASE_URL"] = f"sqlite:///{TEST_DB_PATH.as_posix()}"
+os.environ.setdefault("AWA_DEBUG", "false")
+
+from app.core.database import Base, get_engine  # noqa: E402
+from app.main import app  # noqa: E402
+from app.repositories import models  # noqa: E402,F401
 
 
 @pytest.fixture(autouse=True)

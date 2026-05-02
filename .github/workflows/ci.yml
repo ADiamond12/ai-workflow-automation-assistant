@@ -53,7 +53,7 @@ jobs:
 
       - name: Smoke test container health endpoint
         run: |
+          trap 'docker rm -f awa-smoke || true' EXIT
           docker run -d --name awa-smoke -p 8000:8000 ai-workflow-automation-assistant:ci
           sleep 10
           curl --fail http://127.0.0.1:8000/health
-          docker rm -f awa-smoke

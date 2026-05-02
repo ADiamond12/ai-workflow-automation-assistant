@@ -11,6 +11,9 @@ dist/
 build/
 *.egg-info/
 .env
+.env.*
+!.env.example
 *.db
 *.sqlite3
+*.log
 .DS_Store
