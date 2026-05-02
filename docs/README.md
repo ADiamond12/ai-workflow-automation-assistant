@@ -13,7 +13,12 @@ Current committed docs:
 What is intentionally not shipped yet:
 
 - full prompt version history
-- browser screenshots
 - deployment runbooks beyond local Docker packaging
+
+Current visual evidence:
+
+- [screenshots/home.png](screenshots/home.png)
+- [screenshots/queue.png](screenshots/queue.png)
+- [screenshots/request-detail.png](screenshots/request-detail.png)
 
 The repo is positioned as a local-first applied AI workflow demo, not a production deployment template.

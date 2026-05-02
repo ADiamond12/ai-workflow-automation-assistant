@@ -2,6 +2,8 @@
 
 Local-first applied AI workflow project for intake triage, structured decision support, and human review preparation.
 
+This repository is built as a compact portfolio example: it keeps the AI provider optional, makes validation and persistence visible, and shows the reviewer workflow that sits between model output and business action.
+
 ## Overview
 
 This project accepts semi-structured operations requests, runs deterministic preprocessing, optionally calls an OpenAI-backed provider, validates the structured output, persists the result, and exposes a review queue for follow-up.
@@ -26,6 +28,16 @@ The main design goal is simple: use AI inside a controlled workflow, not as the 
 - `mock` and `openai` provider modes behind a provider boundary
 - local SQLite persistence for demo and development
 - automated test coverage for API, parsing, health, and provider behavior
+
+## Demo Screenshots
+
+| Landing page | Review queue |
+| --- | --- |
+| ![AI workflow assistant landing page](docs/screenshots/home.png) | ![AI workflow assistant review queue](docs/screenshots/queue.png) |
+
+| Request detail |
+| --- |
+| ![AI workflow assistant request detail](docs/screenshots/request-detail.png) |
 
 ## Stack
 
@@ -63,11 +75,19 @@ Main local surfaces:
 - `/queue` for the reviewer queue
 - `/requests/{request_id}` for request detail and review history
 
+To populate the local queue with sanitized demo data, keep the app running and execute:
+
+```bash
+python scripts/seed_demo.py
+```
+
 For a containerized local run:
 
 ```bash
 docker compose up --build
 ```
+
+Docker Compose runs in mock provider mode by default, so a first run does not require a real API key. Use `.env` only when you intentionally want to configure the optional OpenAI provider path.
 
 ## Provider Modes
 
@@ -98,6 +118,7 @@ Repository validation also includes GitHub Actions CI for:
 
 - linting
 - test execution
+- synthetic demo/eval fixture validation
 - Docker build verification
 - container health smoke test
 
@@ -111,6 +132,8 @@ Repository validation also includes GitHub Actions CI for:
   - sanitized demo requests
 - `evals/`
   - evaluation-oriented sample cases
+- `scripts/`
+  - developer utilities, including the local demo seeding helper
 - `tests/`
   - API, provider, parser, and health checks
 
@@ -127,7 +150,7 @@ Repository validation also includes GitHub Actions CI for:
 - single-tenant local-demo posture only
 - local SQLite is suitable for development, not as a production database strategy
 - Docker support is for local packaging, not a full deployment platform
-- screenshots and deployment runbooks are intentionally still light
+- screenshots cover the local review flow, but this is not a hosted production service
 
 ## Public Repo Notes
 
@@ -135,3 +158,4 @@ Repository validation also includes GitHub Actions CI for:
 - do not commit populated runtime databases or local state under `.local/`
 - do not present this as production-ready without auth, stronger deployment controls, and a production database plan
 - treat the OpenAI path as optional and bounded, not as the authoritative core of the workflow
+- committed sample data uses synthetic `.example` email domains only
