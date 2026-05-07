@@ -4,20 +4,20 @@ Local-first applied AI workflow project for intake triage, structured decision s
 
 This repository is built as a compact portfolio example: it keeps the AI provider optional, makes validation and persistence visible, and shows the reviewer workflow that sits between model output and business action.
 
-## Overview
+## How It Works
 
 This project accepts semi-structured operations requests, runs deterministic preprocessing, optionally calls an OpenAI-backed provider, validates the structured output, persists the result, and exposes a review queue for follow-up.
 
 The main design goal is simple: use AI inside a controlled workflow, not as the owner of business state.
 
-## Why This Repo Exists
+## Why It Exists
 
 - shows applied AI usage in a realistic operations-style workflow
 - keeps deterministic validation and persistence visible
 - demonstrates provider abstraction instead of hard-coding model logic into the app
 - includes reviewable API, UI, persistence, and test layers in one small project
 
-## Current Features
+## Implemented Surfaces
 
 - `POST /api/v1/requests` to submit and analyze a request
 - `GET /api/v1/requests/{request_id}` to inspect one request and its decision
@@ -39,7 +39,7 @@ The main design goal is simple: use AI inside a controlled workflow, not as the 
 | --- |
 | ![AI workflow assistant request detail](docs/screenshots/request-detail.png) |
 
-## Stack
+## Technical Stack
 
 - Python 3.11+
 - FastAPI
