@@ -39,6 +39,17 @@ The main design goal is simple: use AI inside a controlled workflow, not as the 
 | --- |
 | ![AI workflow assistant request detail](docs/screenshots/request-detail.png) |
 
+## Reviewer Walkthrough
+
+For a quick technical review:
+
+1. Run the app in mock provider mode.
+2. Seed sanitized requests with `python scripts/seed_demo.py`.
+3. Open `/queue` to inspect pending items.
+4. Open a request detail page to review the model/mock decision, edit the routing fields, and save a human review action.
+
+The important boundary is visible in the flow: model output is parsed and validated, but the stored workflow state remains reviewable and editable before business action.
+
 ## Technical Stack
 
 - Python 3.11+
