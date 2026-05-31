@@ -7,11 +7,26 @@
       <p class="eyebrow">Review Queue</p>
       <h1>Pending Requests</h1>
       <p class="lede">
-        Reviewer-facing queue for requests that still need a human decision.
+        Reviewer-facing queue for provider-generated decisions that still need a human checkpoint.
       </p>
     </div>
     <a class="button button-secondary" href="/">Back Home</a>
   </div>
+
+  <section class="proof-strip proof-strip-compact" aria-label="Queue summary">
+    <div>
+      <span>Pending items</span>
+      <strong>{{ queue.total }}</strong>
+    </div>
+    <div>
+      <span>Default demo path</span>
+      <strong>mock provider</strong>
+    </div>
+    <div>
+      <span>Next action</span>
+      <strong>review detail</strong>
+    </div>
+  </section>
 
   <section class="panel">
     <div class="panel-header">
@@ -37,9 +52,11 @@
       {% endfor %}
     </div>
     {% else %}
-    <p class="empty-state">
-      No pending requests. Submit a new request through the API to populate the queue.
-    </p>
+    <div class="empty-state empty-state-box">
+      <strong>No pending requests yet.</strong>
+      <p>Seed the local demo with sanitized fixture data, then refresh this queue.</p>
+      <code>python scripts/seed_demo.py</code>
+    </div>
     {% endif %}
   </section>
 </section>

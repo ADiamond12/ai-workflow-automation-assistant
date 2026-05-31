@@ -23,6 +23,21 @@
   </section>
   {% endif %}
 
+  <section class="proof-strip proof-strip-compact" aria-label="Decision review summary">
+    <div>
+      <span>Review status</span>
+      <strong>{{ detail.review_status }}</strong>
+    </div>
+    <div>
+      <span>Confidence</span>
+      <strong>{{ "%.2f"|format(detail.decision.confidence) }}</strong>
+    </div>
+    <div>
+      <span>Decision owner</span>
+      <strong>reviewer</strong>
+    </div>
+  </section>
+
   <div class="detail-grid">
     <section class="panel">
       <div class="panel-header">
@@ -64,6 +79,16 @@
         <dt>Explanation</dt>
         <dd>{{ detail.decision.explanation }}</dd>
       </dl>
+      {% if detail.decision.missing_information %}
+      <div class="callout">
+        <strong>Missing information flagged</strong>
+        <ul>
+          {% for item in detail.decision.missing_information %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </section>
   </div>
 
@@ -85,7 +110,7 @@
 
         <label>
           Reviewer Name
-          <input type="text" name="reviewer_name" placeholder="Ops reviewer" />
+          <input type="text" name="reviewer_name" placeholder="Ops reviewer" autocomplete="off" />
         </label>
 
         <label>
@@ -140,6 +165,9 @@
         </div>
 
         <button class="button" type="submit">Save Review Decision</button>
+        <p class="form-note">
+          Saving a review records the human decision and any edited routing fields in review history.
+        </p>
       </form>
     </section>
 

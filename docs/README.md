@@ -20,5 +20,6 @@ Current visual evidence:
 - [screenshots/home.png](screenshots/home.png)
 - [screenshots/queue.png](screenshots/queue.png)
 - [screenshots/request-detail.png](screenshots/request-detail.png)
+- [screenshots/queue-mobile.png](screenshots/queue-mobile.png)
 
 The repo is positioned as a local-first applied AI workflow demo, not a production deployment template.

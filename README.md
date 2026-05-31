@@ -24,7 +24,7 @@ The main design goal is simple: use AI inside a controlled workflow, not as the 
 - `GET /api/v1/queue` to list pending queue items
 - `POST /api/v1/requests/{request_id}/review` to approve or edit a workflow decision
 - `GET /health` for service health
-- starter UI surfaces for queue and request detail review
+- reviewer UI surfaces for queue and request detail review
 - `mock` and `openai` provider modes behind a provider boundary
 - local SQLite persistence for demo and development
 - automated test coverage for API, parsing, health, and provider behavior
@@ -108,6 +108,8 @@ Docker Compose runs in mock provider mode by default, so a first run does not re
   - real provider path with structured output validation
 
 The OpenAI path is intentionally optional. The workflow should still be understandable and testable when the provider is mocked.
+
+When `openai` mode is enabled, submitted intake text and metadata are sent to the configured provider for analysis. Use synthetic or approved data only, and keep `mock` mode as the default for portfolio demos, tests, and screenshots.
 
 ## Example Workflow
 

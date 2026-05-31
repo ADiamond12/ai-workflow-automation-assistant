@@ -39,6 +39,55 @@ a {
   color: inherit;
 }
 
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem max(1rem, calc((100vw - 1160px) / 2));
+  border-bottom: 1px solid var(--border);
+  background: rgba(7, 8, 10, 0.78);
+  backdrop-filter: blur(18px);
+}
+
+.brand,
+.topbar nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.brand {
+  text-decoration: none;
+  font-weight: 850;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(66, 245, 179, 0.45);
+  border-radius: 10px;
+  color: var(--accent);
+  background: rgba(66, 245, 179, 0.09);
+  font-size: 0.78rem;
+}
+
+.topbar nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 750;
+  font-size: 0.92rem;
+}
+
+.topbar nav a:hover {
+  color: var(--text);
+}
+
 .shell {
   width: min(1160px, calc(100% - 3rem));
   margin: 0 auto;
@@ -52,8 +101,13 @@ a {
 }
 
 .hero {
-  min-height: calc(100vh - 8rem);
+  min-height: calc(100vh - 9rem);
   align-content: center;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 1rem;
 }
 
 .eyebrow {
@@ -91,14 +145,16 @@ h2 {
 }
 
 .card-grid,
-.detail-grid {
+.detail-grid,
+.proof-strip {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
 }
 
 .card,
-.panel {
+.panel,
+.proof-strip > div {
   border: 1px solid var(--border);
   border-radius: 18px;
   background:
@@ -111,6 +167,29 @@ h2 {
   padding: 1.3rem;
 }
 
+.proof-strip > div {
+  padding: 1rem;
+}
+
+.proof-strip span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.proof-strip strong {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 1.2rem;
+}
+
+.proof-strip-compact {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
 .card h2,
 .panel h2 {
   margin: 0;
@@ -120,7 +199,9 @@ h2 {
 .queue-summary,
 .history-notes,
 .empty-state,
-.detail-list dd {
+.detail-list dd,
+.form-note,
+.callout {
   color: var(--muted);
   line-height: 1.58;
 }
@@ -181,6 +262,7 @@ h2 {
 
 .queue-item,
 .history-item,
+.callout,
 .notice {
   padding: 1rem;
   border: 1px solid var(--border);
@@ -193,6 +275,27 @@ h2 {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: center;
+}
+
+.empty-state-box {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.empty-state-box strong {
+  color: var(--text);
+}
+
+.empty-state-box code {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--text);
+  white-space: pre-wrap;
 }
 
 .queue-item-main {
@@ -226,6 +329,25 @@ h2 {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+}
+
+.form-note {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.callout {
+  margin-top: 1rem;
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.callout strong {
+  color: var(--text);
+}
+
+.callout ul {
+  margin: 0.55rem 0 0;
+  padding-left: 1.1rem;
 }
 
 .review-form label {
@@ -323,6 +445,16 @@ textarea {
 }
 
 @media (max-width: 760px) {
+  .topbar {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar nav {
+    flex-wrap: wrap;
+  }
+
   .shell {
     width: min(100% - 1.25rem, 1160px);
     padding: 2rem 0;

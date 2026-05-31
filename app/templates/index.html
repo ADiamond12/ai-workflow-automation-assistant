@@ -2,37 +2,59 @@
 
 {% block content %}
 <section class="hero">
-  <p class="eyebrow">Local-First Demo</p>
-  <h1>{{ app_name }}</h1>
-  <p class="lede">
-    Intake triage service with deterministic routing, optional OpenAI enrichment, and a pending
-    review queue for human follow-up.
-  </p>
+  <div class="hero-copy">
+    <p class="eyebrow">Workflow review assistant</p>
+    <h1>{{ app_name }}</h1>
+    <p class="lede">
+      Local-first intake review system that keeps provider output behind validation, persistence,
+      and a human queue before any workflow decision is treated as final.
+    </p>
+    <div class="cta-row">
+      <a class="button" href="/queue">Open review queue</a>
+      <a class="button button-secondary" href="/docs">Inspect API docs</a>
+    </div>
+  </div>
+
+  <section class="proof-strip" aria-label="Project boundaries">
+    <div>
+      <span>Provider mode</span>
+      <strong>mock default</strong>
+    </div>
+    <div>
+      <span>Persistence</span>
+      <strong>local SQLite</strong>
+    </div>
+    <div>
+      <span>Decision owner</span>
+      <strong>human review</strong>
+    </div>
+  </section>
+
   <div class="card-grid">
     <article class="card">
-      <h2>API Surface</h2>
+      <p class="eyebrow">Surface</p>
+      <h2>API and UI from one workflow</h2>
       <p>
-        Submit requests, inspect a single decision, list pending queue items, and verify service
-        health through the current FastAPI routes.
+        Submit requests, inspect a single decision, list pending items, apply review decisions,
+        and verify service health through FastAPI routes and reviewer screens.
       </p>
     </article>
     <article class="card">
-      <h2>Provider Boundary</h2>
+      <p class="eyebrow">Boundary</p>
+      <h2>Provider output is not final state</h2>
       <p>
         Mock mode is the safest default. The OpenAI path is optional, validated, and designed to
-        fail explicitly unless mock fallback is intentionally enabled.
+        fail explicitly unless mock fallback is intentionally enabled by configuration.
       </p>
     </article>
     <article class="card">
-      <h2>Current Limits</h2>
+      <p class="eyebrow">Reviewer path</p>
+      <h2>Queue, detail, history</h2>
       <p>
-        This build is still a single-tenant local demo. Review actions are now demoable, but
-        auth and a fuller deployment posture are still future work.
+        Seed synthetic requests, inspect the queue, open a request detail, edit routing fields,
+        and confirm the review history captures what changed.
       </p>
     </article>
-  </div>
-  <div class="cta-row">
-    <a class="button" href="/queue">Open Review Queue</a>
   </div>
 </section>
 {% endblock %}
