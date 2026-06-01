@@ -4,15 +4,15 @@
 <section class="stack">
   <div class="page-header">
     <div>
-      <p class="eyebrow">Request Detail</p>
+      <p class="eyebrow">Request detail</p>
       <h1>{{ detail.submission.company }}</h1>
       <p class="lede">
-        Review one workflow decision, capture reviewer notes, and approve or edit the current
-        routing recommendation.
+        Check the original request, inspect the generated routing decision, and record the human
+        review that controls the final workflow state.
       </p>
     </div>
     <div class="button-row">
-      <a class="button button-secondary" href="/queue">Back To Queue</a>
+      <a class="button button-secondary" href="/queue">Back to queue</a>
       <a class="button button-secondary" href="/">Home</a>
     </div>
   </div>
@@ -23,10 +23,28 @@
   </section>
   {% endif %}
 
+  <section class="decision-gate" aria-label="Decision review gate">
+    <div>
+      <p class="eyebrow">Human decision gate</p>
+      <h2>{{ detail.decision.category|display_token }} -> {{ detail.decision.recommended_team|display_token }}</h2>
+      <p>
+        Suggested action: <strong>{{ detail.decision.recommended_action|display_token }}</strong>.
+        Keep it, edit it, or mark it approved after review.
+      </p>
+    </div>
+    <div class="confidence-card">
+      <span>Confidence</span>
+      <strong>{{ "%.2f"|format(detail.decision.confidence) }}</strong>
+      <div class="confidence-meter" aria-hidden="true">
+        <span style="width: {{ (detail.decision.confidence * 100)|round(0, 'floor') }}%"></span>
+      </div>
+    </div>
+  </section>
+
   <section class="proof-strip proof-strip-compact" aria-label="Decision review summary">
     <div>
       <span>Review status</span>
-      <strong>{{ detail.review_status }}</strong>
+      <strong>{{ detail.review_status|display_token }}</strong>
     </div>
     <div>
       <span>Confidence</span>
@@ -36,13 +54,17 @@
       <span>Decision owner</span>
       <strong>reviewer</strong>
     </div>
+    <div>
+      <span>Provider mode</span>
+      <strong>{{ provider_mode }}</strong>
+    </div>
   </section>
 
   <div class="detail-grid">
     <section class="panel">
       <div class="panel-header">
         <h2>Submission</h2>
-        <span class="pill">{{ detail.submission.channel }}</span>
+        <span class="pill">{{ detail.submission.channel|display_token }}</span>
       </div>
       <dl class="detail-list">
         <dt>Sender</dt>
@@ -50,7 +72,7 @@
         <dt>Company</dt>
         <dd>{{ detail.submission.company }}</dd>
         <dt>Customer Tier</dt>
-        <dd>{{ detail.submission.customer_tier }}</dd>
+        <dd>{{ detail.submission.customer_tier|display_token }}</dd>
         <dt>Urgency Hint</dt>
         <dd>{{ detail.submission.urgency_hint or "None" }}</dd>
         <dt>Message</dt>
@@ -61,17 +83,17 @@
     <section class="panel">
       <div class="panel-header">
         <h2>Decision</h2>
-        <span class="pill pill-{{ detail.review_status }}">{{ detail.review_status }}</span>
+        <span class="pill pill-{{ detail.review_status }}">{{ detail.review_status|display_token }}</span>
       </div>
       <dl class="detail-list">
         <dt>Category</dt>
-        <dd>{{ detail.decision.category }}</dd>
+        <dd>{{ detail.decision.category|display_token }}</dd>
         <dt>Priority</dt>
-        <dd>{{ detail.decision.priority }}</dd>
+        <dd>{{ detail.decision.priority|display_token }}</dd>
         <dt>Recommended Team</dt>
-        <dd>{{ detail.decision.recommended_team }}</dd>
+        <dd>{{ detail.decision.recommended_team|display_token }}</dd>
         <dt>Recommended Action</dt>
-        <dd>{{ detail.decision.recommended_action }}</dd>
+        <dd>{{ detail.decision.recommended_action|display_token }}</dd>
         <dt>Confidence</dt>
         <dd>{{ "%.2f"|format(detail.decision.confidence) }}</dd>
         <dt>Summary</dt>
@@ -92,33 +114,77 @@
     </section>
   </div>
 
+  <section class="panel provider-evidence">
+    <div class="panel-header">
+      <h2>Provider evidence</h2>
+      <span class="pill">{{ detail.decision.processing_metadata.provider_name or "not recorded" }}</span>
+    </div>
+    <dl class="evidence-grid">
+      <div>
+        <dt>Model</dt>
+        <dd>{{ detail.decision.processing_metadata.model_name or "mock rules" }}</dd>
+      </div>
+      <div>
+        <dt>Prompt version</dt>
+        <dd>{{ detail.decision.prompt_version or "not applicable" }}</dd>
+      </div>
+      <div>
+        <dt>Latency</dt>
+        <dd>
+          {% if detail.decision.processing_metadata.latency_ms is not none %}
+          {{ detail.decision.processing_metadata.latency_ms }} ms
+          {% else %}
+          not recorded
+          {% endif %}
+        </dd>
+      </div>
+      <div>
+        <dt>Token usage</dt>
+        <dd>
+          {% if detail.decision.processing_metadata.token_usage %}
+          {{ detail.decision.processing_metadata.token_usage }}
+          {% else %}
+          none
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+  </section>
+
   <div class="detail-grid">
     <section class="panel">
       <div class="panel-header">
-        <h2>Review Action</h2>
+        <h2>Review action</h2>
         <span class="pill">Queue position: {{ detail.queue_position or "cleared" }}</span>
+      </div>
+      <div class="review-guidance">
+        <strong>Reviewer task</strong>
+        <p>
+          Approve the current route when it is accurate, or edit only the fields that need human
+          correction. Notes explain the decision for the next reviewer.
+        </p>
       </div>
       <form class="review-form" method="post" action="/requests/{{ detail.request_id }}/review">
         <label>
-          Review Status
+          Review status
           <select name="review_status" required>
             {% for option in review_status_options %}
-            <option value="{{ option }}">{{ option }}</option>
+            <option value="{{ option }}">{{ option|display_token }}</option>
             {% endfor %}
           </select>
         </label>
 
         <label>
-          Reviewer Name
+          Reviewer name
           <input type="text" name="reviewer_name" placeholder="Ops reviewer" autocomplete="off" />
         </label>
 
         <label>
-          Reviewer Notes
+          Reviewer notes
           <textarea
             name="reviewer_notes"
             rows="5"
-            placeholder="Why this was approved or edited"
+            placeholder="Decision reason, correction context, or follow-up needed"
           ></textarea>
         </label>
 
@@ -128,7 +194,7 @@
             <select name="category">
               <option value="">Keep current</option>
               {% for option in category_options %}
-              <option value="{{ option }}">{{ option }}</option>
+              <option value="{{ option }}">{{ option|display_token }}</option>
               {% endfor %}
             </select>
           </label>
@@ -138,7 +204,7 @@
             <select name="priority">
               <option value="">Keep current</option>
               {% for option in priority_options %}
-              <option value="{{ option }}">{{ option }}</option>
+              <option value="{{ option }}">{{ option|display_token }}</option>
               {% endfor %}
             </select>
           </label>
@@ -148,7 +214,7 @@
             <select name="recommended_team">
               <option value="">Keep current</option>
               {% for option in team_options %}
-              <option value="{{ option }}">{{ option }}</option>
+              <option value="{{ option }}">{{ option|display_token }}</option>
               {% endfor %}
             </select>
           </label>
@@ -158,13 +224,13 @@
             <select name="recommended_action">
               <option value="">Keep current</option>
               {% for option in action_options %}
-              <option value="{{ option }}">{{ option }}</option>
+              <option value="{{ option }}">{{ option|display_token }}</option>
               {% endfor %}
             </select>
           </label>
         </div>
 
-        <button class="button" type="submit">Save Review Decision</button>
+        <button class="button" type="submit">Save human review</button>
         <p class="form-note">
           Saving a review records the human decision and any edited routing fields in review history.
         </p>
@@ -173,7 +239,7 @@
 
     <section class="panel">
       <div class="panel-header">
-        <h2>Review History</h2>
+        <h2>Review history</h2>
         <span class="pill">{{ detail.reviews|length }} entries</span>
       </div>
       {% if detail.reviews %}
@@ -181,7 +247,7 @@
         {% for review in detail.reviews %}
         <article class="history-item">
           <div class="history-meta">
-            <span class="pill pill-{{ review.review_status }}">{{ review.review_status }}</span>
+            <span class="pill pill-{{ review.review_status }}">{{ review.review_status|display_token }}</span>
             <span class="history-author">{{ review.reviewer_name or "Unspecified reviewer" }}</span>
           </div>
           {% if review.reviewer_notes %}
@@ -190,7 +256,7 @@
           {% if review.edited_fields %}
           <ul class="history-fields">
             {% for key, value in review.edited_fields.items() %}
-            <li><strong>{{ key }}</strong>: {{ value }}</li>
+            <li><strong>{{ key|display_token }}</strong>: {{ value|display_token }}</li>
             {% endfor %}
           </ul>
           {% endif %}
@@ -198,7 +264,9 @@
         {% endfor %}
       </div>
       {% else %}
-      <p class="empty-state">No review history yet.</p>
+      <p class="empty-state">
+        No human review has been recorded yet. Save a review action to create the first audit entry.
+      </p>
       {% endif %}
     </section>
   </div>

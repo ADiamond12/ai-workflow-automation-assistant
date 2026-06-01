@@ -2,17 +2,38 @@
 
 {% block content %}
 <section class="hero">
-  <div class="hero-copy">
-    <p class="eyebrow">Workflow review assistant</p>
-    <h1>{{ app_name }}</h1>
-    <p class="lede">
-      Local-first intake review system that keeps provider output behind validation, persistence,
-      and a human queue before any workflow decision is treated as final.
-    </p>
-    <div class="cta-row">
-      <a class="button" href="/queue">Open review queue</a>
-      <a class="button button-secondary" href="/docs">Inspect API docs</a>
+  <div class="hero-layout">
+    <div class="hero-copy">
+      <p class="eyebrow">Workflow review assistant</p>
+      <h1>Review decisions before action.</h1>
+      <p class="lede">
+        A local intake queue that turns messy operations requests into structured decisions,
+        then keeps every route, priority, and escalation behind validation and human review.
+      </p>
+      <div class="cta-row">
+        <a class="button" href="/queue">Open review queue</a>
+        <a class="button button-secondary" href="/docs">Inspect API docs</a>
+      </div>
     </div>
+
+    <aside class="hero-panel" aria-label="Safe demo posture">
+      <p class="eyebrow">Safe local mode</p>
+      <h2>Mock provider first, live provider only when configured.</h2>
+      <div class="status-matrix">
+        <div>
+          <span>Current provider</span>
+          <strong>{{ provider_mode }}</strong>
+        </div>
+        <div>
+          <span>Fallback policy</span>
+          <strong>{% if openai_fallback_to_mock %}explicit mock fallback{% else %}fail closed{% endif %}</strong>
+        </div>
+        <div>
+          <span>Final decision</span>
+          <strong>reviewer owned</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <section class="proof-strip" aria-label="Project boundaries">
@@ -30,10 +51,33 @@
     </div>
   </section>
 
+  <section class="workflow-lane" aria-label="Review workflow">
+    <article>
+      <span>01</span>
+      <strong>Capture</strong>
+      <p>Normalize the request, customer tier, channel, urgency hint, and source message.</p>
+    </article>
+    <article>
+      <span>02</span>
+      <strong>Analyze</strong>
+      <p>Run deterministic mock logic or a configured provider through the same schema boundary.</p>
+    </article>
+    <article>
+      <span>03</span>
+      <strong>Queue</strong>
+      <p>Persist the decision with category, priority, team, action, confidence, and missing info.</p>
+    </article>
+    <article>
+      <span>04</span>
+      <strong>Review</strong>
+      <p>Approve or edit the routing fields and keep an audit trail of the human decision.</p>
+    </article>
+  </section>
+
   <div class="card-grid">
     <article class="card">
       <p class="eyebrow">Surface</p>
-      <h2>API and UI from one workflow</h2>
+      <h2>API and reviewer UI share one service layer</h2>
       <p>
         Submit requests, inspect a single decision, list pending items, apply review decisions,
         and verify service health through FastAPI routes and reviewer screens.
@@ -41,7 +85,7 @@
     </article>
     <article class="card">
       <p class="eyebrow">Boundary</p>
-      <h2>Provider output is not final state</h2>
+      <h2>Provider output never becomes final by itself</h2>
       <p>
         Mock mode is the safest default. The OpenAI path is optional, validated, and designed to
         fail explicitly unless mock fallback is intentionally enabled by configuration.
@@ -49,7 +93,7 @@
     </article>
     <article class="card">
       <p class="eyebrow">Reviewer path</p>
-      <h2>Queue, detail, history</h2>
+      <h2>Queue, decision detail, review history</h2>
       <p>
         Seed synthetic requests, inspect the queue, open a request detail, edit routing fields,
         and confirm the review history captures what changed.

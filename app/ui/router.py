@@ -13,7 +13,7 @@ from app.domain.enums import (
     RecommendedTeam,
     RequestCategory,
 )
-from app.domain.schemas import ReviewUpdate
+from app.domain.schemas import QueueResponse, ReviewUpdate
 from app.services.errors import RequestNotFoundError
 
 router = APIRouter(include_in_schema=False)
@@ -27,6 +27,41 @@ def _blank_to_none(value: str | None) -> str | None:
     return stripped or None
 
 
+def _display_token(value: str | None) -> str:
+    if not value:
+        return "None"
+    return value.replace("_", " ").strip().title()
+
+
+templates.env.filters["display_token"] = _display_token
+
+
+def _queue_metrics(queue: QueueResponse) -> dict[str, str | int]:
+    if not queue.items:
+        return {
+            "pending": 0,
+            "urgent": 0,
+            "high_or_urgent": 0,
+            "avg_confidence": "0.00",
+            "teams": "None",
+            "next_action": "Seed demo data",
+        }
+
+    urgent = sum(1 for item in queue.items if item.priority == "urgent")
+    high_or_urgent = sum(1 for item in queue.items if item.priority in {"high", "urgent"})
+    avg_confidence = sum(item.confidence for item in queue.items) / len(queue.items)
+    teams = ", ".join(sorted({_display_token(str(item.recommended_team)) for item in queue.items}))
+    next_action = "Review urgent items" if urgent else "Review oldest pending item"
+    return {
+        "pending": queue.total,
+        "urgent": urgent,
+        "high_or_urgent": high_or_urgent,
+        "avg_confidence": f"{avg_confidence:.2f}",
+        "teams": teams,
+        "next_action": next_action,
+    }
+
+
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request) -> HTMLResponse:
     settings = get_settings()
@@ -37,6 +72,8 @@ def home(request: Request) -> HTMLResponse:
             "app_name": settings.app_name,
             "app_version": settings.app_version,
             "api_prefix": settings.api_v1_prefix,
+            "provider_mode": settings.provider_mode,
+            "openai_fallback_to_mock": settings.openai_fallback_to_mock,
         },
     )
 
@@ -48,6 +85,7 @@ def queue_page(
 ) -> HTMLResponse:
     settings = get_settings()
     queue = service.list_queue(limit=50)
+    metrics = _queue_metrics(queue)
     return templates.TemplateResponse(
         request=request,
         name="queue.html",
@@ -55,6 +93,8 @@ def queue_page(
             "app_name": settings.app_name,
             "app_version": settings.app_version,
             "queue": queue,
+            "metrics": metrics,
+            "provider_mode": settings.provider_mode,
         },
     )
 
@@ -84,6 +124,7 @@ def request_detail_page(
             "team_options": [item.value for item in RecommendedTeam],
             "action_options": [item.value for item in RecommendedAction],
             "updated": request.query_params.get("updated") == "1",
+            "provider_mode": settings.provider_mode,
         },
     )
 

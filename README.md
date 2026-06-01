@@ -1,21 +1,21 @@
 # AI Workflow Automation Assistant
 
-Local-first applied AI workflow project for intake triage, structured decision support, and human review preparation.
+Local-first workflow review assistant for intake triage, structured routing decisions, and human review preparation.
 
-This repository is built as a compact portfolio example: it keeps the AI provider optional, makes validation and persistence visible, and shows the reviewer workflow that sits between model output and business action.
+This repository is built as a compact portfolio project: the provider is optional, validation and persistence are visible, and reviewers keep control of the final workflow state.
 
 ## How It Works
 
-This project accepts semi-structured operations requests, runs deterministic preprocessing, optionally calls an OpenAI-backed provider, validates the structured output, persists the result, and exposes a review queue for follow-up.
+This project accepts semi-structured operations requests, runs deterministic preprocessing, optionally calls an OpenAI-backed provider, validates the structured output, persists the result, and exposes an operational review queue.
 
 The main design goal is simple: use AI inside a controlled workflow, not as the owner of business state.
 
 ## Why It Exists
 
-- shows applied AI usage in a realistic operations-style workflow
-- keeps deterministic validation and persistence visible
+- shows applied AI usage inside a reviewable operations workflow
+- keeps deterministic validation, persistence, and fallback behavior visible
 - demonstrates provider abstraction instead of hard-coding model logic into the app
-- includes reviewable API, UI, persistence, and test layers in one small project
+- includes API, reviewer UI, SQLite persistence, synthetic data, and tests in one repo
 
 ## Implemented Surfaces
 
@@ -41,12 +41,12 @@ The main design goal is simple: use AI inside a controlled workflow, not as the 
 
 ## Reviewer Walkthrough
 
-For a quick technical review:
+For a local reviewer walkthrough:
 
 1. Run the app in mock provider mode.
 2. Seed sanitized requests with `python scripts/seed_demo.py`.
 3. Open `/queue` to inspect pending items.
-4. Open a request detail page to review the model/mock decision, edit the routing fields, and save a human review action.
+4. Open a request detail page to inspect the generated decision, edit routing fields if needed, and save a human review action.
 
 The important boundary is visible in the flow: model output is parsed and validated, but the stored workflow state remains reviewable and editable before business action.
 

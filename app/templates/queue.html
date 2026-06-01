@@ -4,33 +4,46 @@
 <section class="stack">
   <div class="page-header">
     <div>
-      <p class="eyebrow">Review Queue</p>
-      <h1>Pending Requests</h1>
+      <p class="eyebrow">Review queue</p>
+      <h1>Operational review queue</h1>
       <p class="lede">
-        Reviewer-facing queue for provider-generated decisions that still need a human checkpoint.
+        Triage recommendations land here first. Reviewers can inspect the context, check the
+        provider boundary, and approve or edit the routing fields before anything becomes action.
       </p>
     </div>
-    <a class="button button-secondary" href="/">Back Home</a>
+    <a class="button button-secondary" href="/">Back home</a>
   </div>
 
-  <section class="proof-strip proof-strip-compact" aria-label="Queue summary">
+  <section class="ops-board" aria-label="Queue summary">
     <div>
       <span>Pending items</span>
-      <strong>{{ queue.total }}</strong>
+      <strong>{{ metrics.pending }}</strong>
     </div>
     <div>
-      <span>Default demo path</span>
-      <strong>mock provider</strong>
+      <span>High or urgent</span>
+      <strong>{{ metrics.high_or_urgent }}</strong>
     </div>
     <div>
+      <span>Average confidence</span>
+      <strong>{{ metrics.avg_confidence }}</strong>
+    </div>
+    <div>
+      <span>Provider mode</span>
+      <strong>{{ provider_mode }}</strong>
+    </div>
+    <div class="ops-wide">
+      <span>Recommended teams</span>
+      <strong>{{ metrics.teams }}</strong>
+    </div>
+    <div class="ops-wide">
       <span>Next action</span>
-      <strong>review detail</strong>
+      <strong>{{ metrics.next_action }}</strong>
     </div>
   </section>
 
   <section class="panel">
     <div class="panel-header">
-      <h2>Current Queue</h2>
+      <h2>Current queue</h2>
       <span class="pill pill-pending">{{ queue.total }} pending</span>
     </div>
 
@@ -39,23 +52,48 @@
       {% for item in queue.items %}
       <article class="queue-item">
         <div class="queue-item-main">
-          <p class="queue-title">{{ item.company }} - {{ item.sender_name }}</p>
+          <div class="queue-item-top">
+            <p class="queue-title">{{ item.company }} - {{ item.sender_name }}</p>
+            <span class="pill pill-{{ item.priority }}">{{ item.priority|display_token }}</span>
+          </div>
           <p class="queue-summary">{{ item.summary }}</p>
+          <dl class="queue-risk">
+            <div>
+              <dt>Category</dt>
+              <dd>{{ item.category|display_token }}</dd>
+            </div>
+            <div>
+              <dt>Team</dt>
+              <dd>{{ item.recommended_team|display_token }}</dd>
+            </div>
+            <div>
+              <dt>Confidence</dt>
+              <dd>{{ "%.2f"|format(item.confidence) }}</dd>
+            </div>
+            <div>
+              <dt>Received</dt>
+              <dd>{{ item.received_at.strftime("%Y-%m-%d %H:%M") }}</dd>
+            </div>
+          </dl>
         </div>
         <div class="queue-meta">
-          <span class="pill">{{ item.category }}</span>
-          <span class="pill">{{ item.priority }}</span>
-          <span class="pill">{{ item.recommended_team }}</span>
-          <a class="button" href="/requests/{{ item.request_id }}">Review</a>
+          <span class="pill">{{ item.review_status|display_token }}</span>
+          <a class="button" href="/requests/{{ item.request_id }}">Open review</a>
         </div>
       </article>
       {% endfor %}
     </div>
     {% else %}
     <div class="empty-state empty-state-box">
-      <strong>No pending requests yet.</strong>
-      <p>Seed the local demo with sanitized fixture data, then refresh this queue.</p>
-      <code>python scripts/seed_demo.py</code>
+      <strong>No pending requests are waiting for review.</strong>
+      <p>
+        Seed sanitized fixture requests to run the local reviewer walkthrough, or post a request to
+        the API endpoint when testing your own data.
+      </p>
+      <div class="empty-state-actions">
+        <code>python scripts/seed_demo.py</code>
+        <code>POST /api/v1/requests</code>
+      </div>
     </div>
     {% endif %}
   </section>
