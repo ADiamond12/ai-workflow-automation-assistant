@@ -24,6 +24,8 @@ def test_homepage_presents_review_boundary(client: TestClient) -> None:
     assert response.status_code == 200
     assert "Review decisions before action." in response.text
     assert "Mock provider first" in response.text
+    assert "manual inbox triage" in response.text
+    assert "review-ready decisions" in response.text
     assert "reviewer owned" in response.text
 
 
@@ -51,6 +53,8 @@ def test_queue_page_presents_operational_metrics(client: TestClient) -> None:
     assert "Operational review queue" in response.text
     assert "High or urgent" in response.text
     assert "Review urgent items" in response.text
+    assert "Open first" in response.text
+    assert "urgent, high-impact items" in response.text
     assert "Northwind Labs" in response.text
     assert "Open review" in response.text
 

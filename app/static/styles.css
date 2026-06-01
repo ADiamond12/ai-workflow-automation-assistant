@@ -239,6 +239,60 @@ h2 {
   gap: 0.85rem;
 }
 
+.impact-strip,
+.queue-guidance {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(66, 245, 179, 0.2);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(66, 245, 179, 0.14), transparent 32%),
+    rgba(255, 255, 255, 0.045);
+  box-shadow: 0 20px 64px var(--shadow);
+}
+
+.impact-strip {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 1rem;
+}
+
+.impact-strip article {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(7, 8, 10, 0.38);
+}
+
+.impact-strip span,
+.queue-guidance span {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.impact-strip strong,
+.queue-guidance strong {
+  display: block;
+  font-size: 1.08rem;
+}
+
+.impact-strip p,
+.queue-guidance p {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.queue-guidance {
+  grid-template-columns: minmax(180px, 0.35fr) minmax(0, 1fr);
+  align-items: center;
+  padding: 1rem 1.1rem;
+}
+
 .workflow-lane article {
   position: relative;
   min-height: 190px;
@@ -709,8 +763,10 @@ textarea {
 
   .hero-layout,
   .workflow-lane,
+  .impact-strip,
   .ops-board,
   .decision-gate,
+  .queue-guidance,
   .queue-risk {
     grid-template-columns: 1fr;
   }

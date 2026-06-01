@@ -17,6 +17,17 @@ The main design goal is simple: use AI inside a controlled workflow, not as the 
 - demonstrates provider abstraction instead of hard-coding model logic into the app
 - includes API, reviewer UI, SQLite persistence, synthetic data, and tests in one repo
 
+## Practical Impact
+
+The useful workflow is not "ask a model for a decision." It is: capture a messy operations request, normalize it, create a structured recommendation, keep the evidence visible, and let a reviewer approve or correct the route before work moves forward.
+
+In practice, the demo replaces a manual inbox scan with a repeatable review artifact:
+
+- one queue item per request
+- category, priority, recommended team, action, confidence, and missing information
+- provider metadata and validation boundary
+- editable human review state and review history
+
 ## Implemented Surfaces
 
 - `POST /api/v1/requests` to submit and analyze a request
