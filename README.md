@@ -61,6 +61,24 @@ For a local reviewer walkthrough:
 
 The important boundary is visible in the flow: model output is parsed and validated, but the stored workflow state remains reviewable and editable before business action.
 
+## One-Command Local Demo
+
+For a repeatable reviewer demo, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_demo.ps1
+```
+
+The script installs the project, runs lint/tests, starts the app in safe `mock` provider mode, seeds synthetic requests, and prints the landing and queue URLs. It uses `.local/demo_workflow_assistant.db` so the demo state stays local and ignored.
+
+The demo proves the useful workflow end to end:
+
+```text
+messy request -> normalized recommendation -> queue item -> request detail -> human review
+```
+
+Use this path for portfolio review because it does not require an API key and does not send sample data to an external provider.
+
 ## Technical Stack
 
 - Python 3.11+
