@@ -28,6 +28,15 @@ In practice, the demo replaces a manual inbox scan with a repeatable review arti
 - provider metadata and validation boundary
 - editable human review state and review history
 
+## Reviewer Proof
+
+- **Problem:** operational requests arrive as messy text, but routing decisions need validation, persistence, and human ownership.
+- **First command:** `powershell -ExecutionPolicy Bypass -File .\scripts\run_demo.ps1`
+- **Proof artifact:** seeded mock requests in a local SQLite database, visible through the review queue and request-detail pages.
+- **Visual proof:** `docs/screenshots/home.png`, `docs/screenshots/queue.png`, `docs/screenshots/request-detail.png`, and `docs/screenshots/queue-mobile.png`.
+- **Validation:** 27 pytest tests plus `ruff check .` cover API contracts, provider behavior, parsing, health, and review flow.
+- **Current limitation:** the default demo uses the mock provider; live OpenAI mode is optional and should be used only with explicit local configuration.
+
 ## Implemented Surfaces
 
 - `POST /api/v1/requests` to submit and analyze a request
