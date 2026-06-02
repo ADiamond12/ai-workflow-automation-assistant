@@ -16,6 +16,15 @@ def test_synthetic_requests_are_valid_intake_submissions() -> None:
         assert submission.sender_email.endswith(".example")
 
 
+def test_synthetic_requests_cover_operations_review_scenarios() -> None:
+    payload = json.loads((ROOT / "sample_data" / "synthetic_requests.json").read_text())
+    combined_text = " ".join(item["message_text"].lower() for item in payload)
+
+    assert len(payload) >= 4
+    for term in ("configuration", "acceptance test", "sql validation", "handover"):
+        assert term in combined_text
+
+
 def test_eval_cases_use_supported_expected_labels() -> None:
     payload = json.loads((ROOT / "evals" / "sample_cases.json").read_text())
 

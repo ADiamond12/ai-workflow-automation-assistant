@@ -53,6 +53,14 @@ class LocalMockProvider(AIProvider):
         "failing",
         "bug",
         "degraded",
+        "blocked",
+        "blocker",
+        "commissioning",
+        "configuration",
+        "handover",
+        "validation",
+        "scanner timeout",
+        "acceptance test",
     )
     _FEATURE_KEYWORDS = (
         "feature",
@@ -79,6 +87,8 @@ class LocalMockProvider(AIProvider):
         "sev",
         "severe",
         "production down",
+        "go-live",
+        "blocked before",
     )
 
     def analyze(self, submission: IntakeSubmission) -> ProviderResponse:
@@ -222,7 +232,18 @@ class LocalMockProvider(AIProvider):
         ):
             missing.append("invoice or charge reference")
         if category is RequestCategory.INCIDENT_REPORT and not self._contains_any(
-            message, ("error", "screenshots", "steps", "timestamp", "environment")
+            message,
+            (
+                "error",
+                "screenshots",
+                "steps",
+                "timestamp",
+                "environment",
+                "test",
+                "configuration",
+                "validation",
+                "handover",
+            ),
         ):
             missing.append("error details or reproduction steps")
         if category is RequestCategory.OTHER:

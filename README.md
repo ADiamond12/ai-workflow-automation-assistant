@@ -32,7 +32,7 @@ In practice, the demo replaces a manual inbox scan with a repeatable review arti
 
 - **Problem:** operational requests arrive as messy text, but routing decisions need validation, persistence, and human ownership.
 - **First command:** `powershell -ExecutionPolicy Bypass -File .\scripts\run_demo.ps1`
-- **Proof artifact:** seeded mock requests in a local SQLite database, visible through the review queue and request-detail pages.
+- **Proof artifact:** seeded synthetic operations requests in a local SQLite database, visible through the review queue and request-detail pages.
 - **Visual proof:** `docs/screenshots/home.png`, `docs/screenshots/queue.png`, `docs/screenshots/request-detail.png`, and `docs/screenshots/queue-mobile.png`.
 - **Validation:** 27 pytest tests plus `ruff check .` cover API contracts, provider behavior, parsing, health, and review flow.
 - **Current limitation:** the default demo uses the mock provider; live OpenAI mode is optional and should be used only with explicit local configuration.
@@ -64,8 +64,8 @@ In practice, the demo replaces a manual inbox scan with a repeatable review arti
 For a local reviewer walkthrough:
 
 1. Run the app in mock provider mode.
-2. Seed sanitized requests with `python scripts/seed_demo.py`.
-3. Open `/queue` to inspect pending items.
+2. Seed synthetic operations requests with `python scripts/seed_demo.py`.
+3. Open `/queue` to inspect configuration, test-failure, SQL validation, and handover-review items.
 4. Open a request detail page to inspect the generated decision, edit routing fields if needed, and save a human review action.
 
 The important boundary is visible in the flow: model output is parsed and validated, but the stored workflow state remains reviewable and editable before business action.
@@ -83,7 +83,7 @@ The script installs the project, runs lint/tests, starts the app in safe `mock` 
 The demo proves the useful workflow end to end:
 
 ```text
-messy request -> normalized recommendation -> queue item -> request detail -> human review
+messy operations request -> normalized recommendation -> queue item -> request detail -> human review
 ```
 
 Use this path for portfolio review because it does not require an API key and does not send sample data to an external provider.
@@ -180,7 +180,7 @@ Repository validation also includes GitHub Actions CI for:
 - `docs/`
   - architecture and project notes
 - `sample_data/`
-  - sanitized demo requests
+  - sanitized operations-style demo requests
 - `evals/`
   - evaluation-oriented sample cases
 - `scripts/`

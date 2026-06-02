@@ -11,5 +11,6 @@ Keep this folder sanitized:
 Committed demo fixture:
 
 - `synthetic_requests.json`
-  - three realistic intake samples for billing, account access, and vendor-review flows
+  - four synthetic operations requests for configuration drift, acceptance-test failure,
+    SQL/data validation, and handover blocker review
   - safe to use in screenshots, API demos, or local queue walkthroughs
