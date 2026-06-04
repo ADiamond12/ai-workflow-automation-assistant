@@ -24,7 +24,8 @@ def post_json(url: str, payload: dict) -> dict:
 
 
 def main() -> None:
-    samples = json.loads((ROOT / "sample_data" / "synthetic_requests.json").read_text())
+    sample_path = ROOT / "sample_data" / "synthetic_requests.json"
+    samples = json.loads(sample_path.read_text(encoding="utf-8"))
     for sample in samples:
         created = post_json(f"{BASE_URL}/api/v1/requests", sample)
         print(f"{created['request_id']} {created['priority']} {created['category']}")

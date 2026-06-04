@@ -4,7 +4,9 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-TEST_DB_PATH = Path(".pytest_cache/test_workflow_assistant.db").resolve()
+TEST_DB_PATH = Path(
+    os.getenv("AWA_TEST_DB_PATH", ".pytest_cache/test_workflow_assistant.db")
+).resolve()
 TEST_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 os.environ["AWA_DATABASE_URL"] = f"sqlite:///{TEST_DB_PATH.as_posix()}"
 os.environ.setdefault("AWA_DEBUG", "false")

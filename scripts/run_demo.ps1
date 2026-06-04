@@ -8,18 +8,51 @@ $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
+$localDir = if ($env:AWA_LOCAL_DIR) {
+    $env:AWA_LOCAL_DIR
+} else {
+    Join-Path $root ".local"
+}
+New-Item -ItemType Directory -Force -Path $localDir | Out-Null
+
+if (-not $env:RUFF_CACHE_DIR) {
+    $env:RUFF_CACHE_DIR = Join-Path $localDir "ruff_cache"
+}
+
+if (-not $env:AWA_TEST_DB_PATH) {
+    $env:AWA_TEST_DB_PATH = Join-Path $localDir "test_workflow_assistant.db"
+}
+
+function Assert-NativeSuccess {
+    param([string]$Step)
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "$Step failed with exit code $LASTEXITCODE"
+    }
+}
+
 if (-not $SkipInstall) {
     python -m pip install -e .[dev]
+    Assert-NativeSuccess "Install editable package"
 }
 
 if (-not $SkipTests) {
     ruff check .
-    pytest
+    Assert-NativeSuccess "Run ruff"
+    pytest -p no:cacheprovider
+    Assert-NativeSuccess "Run pytest"
 }
 
-New-Item -ItemType Directory -Force -Path ".local" | Out-Null
-$env:AWA_PROVIDER_MODE = "mock"
-$env:AWA_DATABASE_URL = "sqlite:///./.local/demo_workflow_assistant.db"
+if (-not $env:AWA_PROVIDER_MODE) {
+    $env:AWA_PROVIDER_MODE = "mock"
+}
+
+if (-not $env:AWA_DATABASE_URL) {
+    $dbPath = Join-Path $localDir "demo_workflow_assistant.db"
+    $dbUri = $dbPath -replace "\\", "/"
+    $env:AWA_DATABASE_URL = "sqlite:///$dbUri"
+}
+
 $env:AWA_APP_PORT = "$Port"
 
 $baseUrl = "http://127.0.0.1:$Port"
@@ -51,6 +84,7 @@ try {
 
     $env:AWA_DEMO_BASE_URL = $baseUrl
     python scripts/seed_demo.py
+    Assert-NativeSuccess "Seed demo requests"
 
     Write-Host ""
     Write-Host "Reviewer demo is ready:"

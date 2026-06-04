@@ -34,7 +34,7 @@ In practice, the demo replaces a manual inbox scan with a repeatable review arti
 - **First command:** `powershell -ExecutionPolicy Bypass -File .\scripts\run_demo.ps1`
 - **Proof artifact:** seeded synthetic operations requests in a local SQLite database, visible through the review queue and request-detail pages.
 - **Visual proof:** `docs/screenshots/home.png`, `docs/screenshots/queue.png`, `docs/screenshots/request-detail.png`, and `docs/screenshots/queue-mobile.png`.
-- **Validation:** 27 pytest tests plus `ruff check .` cover API contracts, provider behavior, parsing, health, and review flow.
+- **Validation:** 28 pytest tests plus `ruff check .` cover API contracts, provider behavior, parsing, health, and review flow.
 - **Current limitation:** the default demo uses the mock provider; live OpenAI mode is optional and should be used only with explicit local configuration.
 
 ## Implemented Surfaces
