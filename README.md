@@ -34,8 +34,12 @@ In practice, the demo replaces a manual inbox scan with a repeatable review arti
 - **First command:** `powershell -ExecutionPolicy Bypass -File .\scripts\run_demo.ps1`
 - **Proof artifact:** seeded synthetic operations requests in a local SQLite database, visible through the review queue and request-detail pages.
 - **Visual proof:** `docs/screenshots/home.png`, `docs/screenshots/queue.png`, `docs/screenshots/request-detail.png`, and `docs/screenshots/queue-mobile.png`.
-- **Validation:** 28 pytest tests plus `ruff check .` cover API contracts, provider behavior, parsing, health, and review flow.
+- **Validation:** 30 pytest tests plus `ruff check .` cover API contracts, provider behavior, parsing, health, review flow, and the OpsForge module contract.
 - **Current limitation:** the default demo uses the mock provider; live OpenAI mode is optional and should be used only with explicit local configuration.
+
+## OpsForge Module Contract
+
+`docs/opsforge-module-contract.json` records this repo as the OpsForge Review Queue module: accepted intake types, review outputs, proof screenshots, deployment shape, safety boundaries, and current limitations. A pytest contract test validates that the module boundary remains explicit and public-safe.
 
 ## Implemented Surfaces
 

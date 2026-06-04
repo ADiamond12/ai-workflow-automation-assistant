@@ -1,0 +1,43 @@
+{
+  "module_id": "opsforge-review-queue",
+  "repo": "ai-workflow-automation-assistant",
+  "suite_role": "Operations intake and review queue",
+  "status": "product-grade local module",
+  "primary_user": "operations reviewer coordinating configuration issues, test failures, validation findings, and handover blockers",
+  "input_types": [
+    "incident note",
+    "test failure",
+    "SQL or data validation issue",
+    "configuration blocker",
+    "handover note",
+    "report anomaly"
+  ],
+  "output_artifacts": [
+    "classified queue item",
+    "priority and route recommendation",
+    "missing-information list",
+    "action package",
+    "review decision",
+    "status history",
+    "audit trail"
+  ],
+  "proof_artifacts": [
+    "docs/screenshots/home.png",
+    "docs/screenshots/queue.png",
+    "docs/screenshots/request-detail.png",
+    "docs/screenshots/queue-mobile.png"
+  ],
+  "local_demo_command": "powershell -ExecutionPolicy Bypass -File .\\scripts\\run_demo.ps1",
+  "deployment_shape": "FastAPI application with SQLite demo persistence, mock provider default, Docker-ready service shape",
+  "safety_boundaries": [
+    "mock provider is the default reviewer path",
+    "external provider use is optional and configured server-side",
+    "synthetic operations requests only",
+    "reviewer decision remains editable and human-owned"
+  ],
+  "limitations": [
+    "not connected to a production ticketing system",
+    "routing recommendations do not execute operational changes",
+    "demo persistence is local SQLite"
+  ]
+}
