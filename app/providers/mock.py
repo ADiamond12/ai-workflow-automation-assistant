@@ -100,6 +100,13 @@ class LocalMockProvider(AIProvider):
         team = self._detect_team(category)
         action = self._detect_action(category, priority, normalized_text)
         missing_information = self._detect_missing_information(submission, category)
+        action_package = self._build_action_package(
+            category,
+            priority,
+            team,
+            action,
+            missing_information,
+        )
         confidence = self._score_confidence(
             category, priority, missing_information, normalized_text
         )
@@ -120,6 +127,7 @@ class LocalMockProvider(AIProvider):
             recommended_team=team,
             recommended_action=action,
             missing_information=missing_information,
+            action_package=action_package,
             confidence=confidence,
             explanation=explanation,
             review_status=ReviewStatus.PENDING,
@@ -142,6 +150,7 @@ class LocalMockProvider(AIProvider):
                 "team": team.value,
                 "action": action.value,
                 "confidence": confidence,
+                "action_package": action_package,
             },
         )
 
@@ -304,6 +313,38 @@ class LocalMockProvider(AIProvider):
             f"routed to {team.value}, and set to {action.value}. "
             f"Confidence score: {confidence:.2f}."
         )
+
+    def _build_action_package(
+        self,
+        category: RequestCategory,
+        priority: PriorityLevel,
+        team: RecommendedTeam,
+        action: RecommendedAction,
+        missing_information: list[str],
+    ) -> list[str]:
+        package = [
+            f"Route to {team.value.replace('_', ' ')} with {priority.value} priority.",
+            f"Recommended reviewer action: {action.value.replace('_', ' ')}.",
+        ]
+        if category is RequestCategory.INCIDENT_REPORT:
+            package.append(
+                "Attach test evidence, environment, timestamp, and recent configuration changes."
+            )
+            package.append("Confirm rollback or retry window before handover continues.")
+        elif category is RequestCategory.ACCOUNT_ACCESS:
+            package.append("Confirm affected user or workspace before changing access state.")
+        elif category is RequestCategory.BILLING_ISSUE:
+            package.append("Confirm invoice, amount, and billing period before routing.")
+        elif category is RequestCategory.VENDOR_REQUEST:
+            package.append("Check procurement owner, contract status, and security-review need.")
+        elif category is RequestCategory.FEATURE_REQUEST:
+            package.append("Capture user impact and decide whether this belongs in roadmap review.")
+        else:
+            package.append("Ask for business context before assigning an owner.")
+
+        if missing_information:
+            package.append("Request missing information: " + ", ".join(missing_information) + ".")
+        return package
 
     def _collect_signals(self, text: str) -> dict[str, bool]:
         return {

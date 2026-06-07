@@ -68,6 +68,7 @@ def test_request_detail_presents_decision_gate_and_provider_evidence(
 
     assert response.status_code == 200
     assert "Human decision gate" in response.text
+    assert "Action package" in response.text
     assert "Provider evidence" in response.text
     assert "mock-local" in response.text
     assert "Save human review" in response.text

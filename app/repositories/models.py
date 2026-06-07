@@ -93,6 +93,7 @@ class DecisionRecord(TimestampMixin, Base):
         nullable=False,
     )
     missing_information: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    action_package: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
     confidence: Mapped[float] = mapped_column(Float, nullable=False)
     explanation: Mapped[str] = mapped_column(Text, nullable=False)
     review_status: Mapped[ReviewStatus] = mapped_column(

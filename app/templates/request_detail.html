@@ -111,6 +111,16 @@
         </ul>
       </div>
       {% endif %}
+      {% if detail.decision.action_package %}
+      <div class="callout action-package">
+        <strong>Action package</strong>
+        <ul>
+          {% for item in detail.decision.action_package %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </section>
   </div>
 

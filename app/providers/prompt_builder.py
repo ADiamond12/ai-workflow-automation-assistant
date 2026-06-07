@@ -42,6 +42,7 @@ def _build_system_prompt(*, prompt_version: str) -> str:
             "Rules:",
             "- Use category, priority, team, and action that best fit the request text.",
             "- Keep missing_information as a short list of concrete missing fields.",
+            "- Include action_package as two to five concrete reviewer handoff steps.",
             "- Confidence must be a number between 0 and 1.",
         ]
     )

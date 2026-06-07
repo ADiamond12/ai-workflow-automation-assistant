@@ -99,6 +99,7 @@ class WorkflowDecision(BaseModel):
     recommended_team: RecommendedTeam
     recommended_action: RecommendedAction
     missing_information: list[str] = Field(default_factory=list)
+    action_package: list[str] = Field(default_factory=list)
     confidence: float = Field(ge=0.0, le=1.0)
     explanation: str = Field(min_length=1, max_length=2000)
     review_status: ReviewStatus = ReviewStatus.PENDING
@@ -113,9 +114,9 @@ class WorkflowDecision(BaseModel):
             raise ValueError("field must not be empty")
         return normalized
 
-    @field_validator("missing_information")
+    @field_validator("missing_information", "action_package")
     @classmethod
-    def _normalize_missing_information(cls, value: list[str]) -> list[str]:
+    def _normalize_text_list(cls, value: list[str]) -> list[str]:
         return normalize_text_list(value)
 
     @field_validator("confidence")

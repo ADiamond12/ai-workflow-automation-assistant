@@ -212,6 +212,7 @@ class WorkflowService:
             recommended_team=decision.recommended_team,
             recommended_action=decision.recommended_action,
             missing_information=decision.missing_information,
+            action_package=decision.action_package,
             confidence=decision.confidence,
             explanation=decision.explanation,
             review_status=decision.review_status,

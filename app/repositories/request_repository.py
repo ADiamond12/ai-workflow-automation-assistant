@@ -120,6 +120,7 @@ class DecisionRepository(Repository):
             recommended_team=decision.recommended_team,
             recommended_action=decision.recommended_action,
             missing_information=list(decision.missing_information),
+            action_package=list(decision.action_package),
             confidence=decision.confidence,
             explanation=decision.explanation,
             review_status=decision.review_status,

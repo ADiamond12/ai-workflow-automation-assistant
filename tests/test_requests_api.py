@@ -39,6 +39,8 @@ def test_submit_request_persists_and_can_be_fetched(client: TestClient) -> None:
     assert created["priority"] == "urgent"
     assert created["request_id"]
     assert created["processing_metadata"]["provider_name"] == "mock-local"
+    assert created["action_package"]
+    assert "Route to" in created["action_package"][0]
 
     detail_response = client.get(f"/api/v1/requests/{created['request_id']}")
 
@@ -48,6 +50,7 @@ def test_submit_request_persists_and_can_be_fetched(client: TestClient) -> None:
     assert detail["submission"]["sender_name"] == "Alex Morgan"
     assert detail["submission"]["company"] == "Northwind Labs"
     assert detail["decision"]["request_id"] == created["request_id"]
+    assert detail["decision"]["action_package"] == created["action_package"]
     assert detail["queue_position"] == 1
 
 

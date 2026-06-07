@@ -59,6 +59,7 @@ def build_workflow_decision(
         recommended_team=parsed.analysis.recommended_team,
         recommended_action=parsed.analysis.recommended_action,
         missing_information=parsed.analysis.missing_information,
+        action_package=parsed.analysis.action_package,
         confidence=parsed.analysis.confidence,
         explanation=parsed.analysis.explanation,
         review_status=ReviewStatus.PENDING,

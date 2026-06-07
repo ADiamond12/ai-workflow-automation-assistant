@@ -21,5 +21,6 @@ class OpenAIWorkflowAnalysis(BaseModel):
     recommended_team: RecommendedTeam
     recommended_action: RecommendedAction
     missing_information: list[str] = Field(default_factory=list)
+    action_package: list[str] = Field(default_factory=list)
     confidence: float = Field(ge=0.0, le=1.0)
     explanation: str = Field(min_length=1, max_length=2000)
