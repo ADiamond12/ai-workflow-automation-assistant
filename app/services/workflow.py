@@ -56,7 +56,7 @@ class WorkflowService:
             request = self.request_repository.create_request(submission)
             provider_response = self.provider.analyze(submission)
             decision = provider_response.decision.model_copy(
-                update={"request_id": request.id}
+                update={"request_id": request.id, "review_status": ReviewStatus.PENDING}
             )
             self.decision_repository.create_decision(
                 request_id=request.id,
